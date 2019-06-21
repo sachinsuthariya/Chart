@@ -1,0 +1,92 @@
+
+<% include layout/header  %>
+    <!-- content --> 
+
+    <!-- bar chart -->
+    <div class="container">
+        <div>
+            <form action="/" method="GET">
+                <select class="form-control" name="type" id="type">
+                    <option> --- Select Chart Type --- </option>
+                    <option value="bar">bar</option>
+                    <option value="line">Line Chart</option>
+                    <option value="pie">Pie Chart</option>
+                </select>
+                <button  class="btn btn-primary">Apply</button>
+            </form>
+        </div>
+
+        <div class="row">
+            <div class="col col-sm-4">
+                <canvas id="barChart" height="10%" width="10%" ></canvas>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- bar chart end here -->
+
+    
+        <div class="container">
+            <div class="row">
+                <div class="col col-sm-4">
+                    <canvas id="pieChart" type="<%= data.type %>"  data="<%= data.data%>" ></canvas>
+                </div>
+            </div>
+        </div>
+
+
+<!-- script start here -->
+
+<script>
+    
+    var Label =  '<%= data.data.labels %>';
+    var Label1 =  Label.split(",");
+    var Population = '<%= data.data.datasets[0].data %>';
+    var Population1 =  Population.split(",").map(Number);
+    console.log("type: ", "<%= data.type %>", typeof(Label1), typeof(Population1), Label1[1], Population);
+    // console.log("labelks",data.data.labels );
+    
+        var ctx = document.getElementById('barChart').getContext('2d');
+       
+       var myChart = new Chart(ctx, {
+           type: "<%= data.type %>",
+           data: {
+            //    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                labels: Label1,
+               datasets: [{
+                   label: '<%= data.data.datasets[0].label %>',
+                   data: Population1,
+                   backgroundColor: [
+                       'rgba(255, 99, 132, 0.2)',
+                       'rgba(54, 162, 235, 0.2)',
+                       'rgba(255, 206, 86, 0.2)',
+                       'rgba(75, 192, 192, 0.2)',
+                       'rgba(153, 102, 255, 0.2)',
+                       'rgba(255, 159, 64, 0.2)'
+                   ],
+                   borderColor: [
+                       'rgba(255, 99, 132, 1)',
+                       'rgba(54, 162, 235, 1)',
+                       'rgba(255, 206, 86, 1)',
+                       'rgba(75, 192, 192, 1)',
+                       'rgba(153, 102, 255, 1)',
+                       'rgba(255, 159, 64, 1)'
+                   ],
+                   borderWidth: 1
+               }]
+           },
+           options: {
+               scales: {
+                   yAxes: [{
+                       ticks: {
+                           beginAtZero: true
+                       }
+                   }]
+               }
+           }
+       });
+       </script>
+
+<% include layout/footer  %>
+
