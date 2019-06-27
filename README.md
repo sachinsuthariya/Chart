@@ -22,9 +22,9 @@ command to install pakages
 
 
 # Run Project
-
-\$ node app.js
-
+```
+$ node app.js
+```
 # Authors
 
 Sachin Suthariya
