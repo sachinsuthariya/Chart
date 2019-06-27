@@ -1,43 +1,41 @@
-var express = require("express");
-var mongoose = require("mongoose");
-var State = require("./models/state");
-var seedDB = require("./seeds");
-var chart = require("chart.js");
-var app = express();
-app.set("view engine", "ejs");
-// seedDB();
+// import pakages
+var express = require("express"),
+    mongoose = require("mongoose"),
+    State = require("./models/state"),
+    app = express();
 
+// set view engine
+app.set("view engine", "ejs");
+
+// connection url for mongoDB
 mongoose.connect("mongodb://localhost/chart", {
     useNewUrlParser: true
 });
 
+// Routes 
 app.get("/", function (req, res) {
-    // res.send("hello World");
+    // get chart type from from
     var charttype;
-    if(req.query.type){
+    if (req.query.type) {
         charttype = req.query.type;
-    }else{
+    } else {
         charttype = "bar";
     }
-    console.log("chart type", charttype);
-    
-    console.log("chart type", charttype);
-    
+
+    // get the data from database
     State.find({}, function (err, stateData) {
         if (err) {
             res.send("Error in data fatching");
         } else {
             var stateLabels = [];
             var statePopulation = [];
-            // console.log("stae data:::",stateData);
+
             stateData.forEach(element => {
                 stateLabels.push(element.state);
                 statePopulation.push(parseInt(element.population));
             });
-            
-            // console.log("stae labels:::",stateLabels);
-            // console.log("stae Population:::",statePopulation);
-            
+
+            // created chart object 
             var chart = {
                 type: charttype,
                 data: {
@@ -47,17 +45,18 @@ app.get("/", function (req, res) {
                         data: statePopulation
                     }]
                 }
-              };
-            // res.send("Student Data is => "+ studentData);
-            res.render("index",{data: chart});
+            };
 
-            // res.render("index")
+            // render to index.ejs
+            res.render("index", {
+                data: chart
+            });
+
         }
     });
 });
 
-
-
+// port allocation
 app.listen("5000", function () {
-    console.log("app Started...");
+    console.log("Chart App Started on : localhost:5000/");
 });

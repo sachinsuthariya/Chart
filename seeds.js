@@ -1,6 +1,7 @@
-var mongoose = require("mongoose");
+// pakage import
 var State = require("./models/state");
 
+//created a static object to seed DB
 var data = [
     {
         state: "Utter Pradesh",
@@ -24,17 +25,13 @@ var data = [
     }
 ];
 
-
+// function to seed database
 function seedDB(){
     data.forEach(element => {
         State.create(element, function(err, state){
-            if(err){
-                console.log("Error in data Seeding");
-            }else{
-                console.log("Data inserted to Student Successfully");   
-            }
         });
     });
 }
 
+// export function
 module.exports = seedDB;
